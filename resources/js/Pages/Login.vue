@@ -1,3 +1,19 @@
+<script setup>
+    import { Link, useForm } from '@inertiajs/vue3';
+    import { ref } from 'vue';
+
+    const showPassword = ref(false);
+
+    const form = useForm({
+    email: '',
+    password: '',
+    });
+
+    const submit = () => {
+    form.post('/api/login');
+    };
+</script>
+
 <template>
   <div class="form-container">
     <h1>Connexion</h1>
@@ -31,22 +47,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { Link, useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
-
-const showPassword = ref(false);
-
-const form = useForm({
-  email: '',
-  password: '',
-});
-
-const submit = () => {
-  form.post('/api/login');
-};
-</script>
 
 <style scoped>
 .form-container {
