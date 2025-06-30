@@ -1,0 +1,498 @@
+/* ===============================================
+   QuizApp Home Page - Styles modernes
+   =============================================== */
+
+/* Variables CSS pour une cohérence des couleurs */
+:root {
+    --primary-blue: #2563eb;
+    --primary-green: #059669;
+    --primary-purple: #7c3aed;
+    --gradient-blue: linear-gradient(135deg, #3b82f6, #2563eb);
+    --gradient-green: linear-gradient(135deg, #10b981, #059669);
+    --gradient-purple: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    --shadow-light: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-intense: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Container principal */
+.quiz-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
+    padding: 3rem 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Effet de particules en arrière-plan */
+.quiz-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+    animation: floating 6s ease-in-out infinite;
+}
+
+@keyframes floating {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(1deg); }
+}
+
+/* Wrapper principal */
+.main-wrapper {
+    max-width: 1280px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+/* Section Header */
+.header-section {
+    text-align: center;
+    margin-bottom: 4rem;
+    animation: slideInDown 0.8s ease-out;
+}
+
+@keyframes slideInDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.main-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #1f2937, #4f46e5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.title-accent {
+    color: #4f46e5;
+    position: relative;
+}
+
+.title-accent::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-blue);
+    border-radius: 2px;
+    animation: expandWidth 1s ease-out 0.5s both;
+}
+
+@keyframes expandWidth {
+    0% { width: 0; }
+    100% { width: 100%; }
+}
+
+.subtitle {
+    font-size: 1.25rem;
+    color: #6b7280;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+    animation: fadeInUp 0.8s ease-out 0.3s both;
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Grille des catégories */
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+/* Cartes de catégorie */
+.category-card {
+    position: relative;
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: var(--shadow-light);
+    transition: var(--transition-smooth);
+    overflow: hidden;
+    cursor: pointer;
+    animation: slideInUp 0.6s ease-out both;
+}
+
+.category-card:nth-child(1) { animation-delay: 0.1s; }
+.category-card:nth-child(2) { animation-delay: 0.2s; }
+.category-card:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes slideInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.category-card:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: var(--shadow-intense);
+}
+
+/* Overlay coloré au hover */
+.category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    transition: var(--transition-smooth);
+    border-radius: 24px;
+}
+
+.category-card.math::before {
+    background: var(--gradient-blue);
+}
+
+.category-card.french::before {
+    background: var(--gradient-green);
+}
+
+.category-card.computer::before {
+    background: var(--gradient-purple);
+}
+
+.category-card:hover::before {
+    opacity: 0.08;
+}
+
+/* Icône des catégories */
+.category-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-bounce);
+    position: relative;
+    overflow: hidden;
+}
+
+.category-icon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    transition: var(--transition-smooth);
+    border-radius: 20px;
+}
+
+.category-icon.math {
+    background-color: #dbeafe;
+}
+
+.category-icon.math::before {
+    background: var(--gradient-blue);
+}
+
+.category-icon.french {
+    background-color: #d1fae5;
+}
+
+.category-icon.french::before {
+    background: var(--gradient-green);
+}
+
+.category-icon.computer {
+    background-color: #e9d5ff;
+}
+
+.category-icon.computer::before {
+    background: var(--gradient-purple);
+}
+
+.category-card:hover .category-icon::before {
+    opacity: 1;
+}
+
+.category-card:hover .category-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.category-icon svg {
+    width: 40px;
+    height: 40px;
+    transition: var(--transition-smooth);
+    position: relative;
+    z-index: 2;
+}
+
+.category-icon.math svg {
+    color: var(--primary-blue);
+}
+
+.category-icon.french svg {
+    color: var(--primary-green);
+}
+
+.category-icon.computer svg {
+    color: var(--primary-purple);
+}
+
+.category-card:hover .category-icon svg {
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Titre des catégories */
+.category-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #111827;
+    text-align: center;
+    margin-bottom: 1rem;
+    transition: var(--transition-smooth);
+}
+
+.category-card:hover .category-title {
+    color: #4f46e5;
+}
+
+/* Description des catégories */
+.category-description {
+    color: #6b7280;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+/* Stats des catégories */
+.category-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+    color: #9ca3af;
+    padding: 0 0.5rem;
+}
+
+/* Bouton principal */
+.category-button {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 1rem;
+    color: white;
+    cursor: pointer;
+    transition: var(--transition-bounce);
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+}
+
+.category-button.math {
+    background: var(--gradient-blue);
+}
+
+.category-button.french {
+    background: var(--gradient-green);
+}
+
+.category-button.computer {
+    background: var(--gradient-purple);
+}
+
+.category-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.category-button:active {
+    transform: scale(0.98);
+}
+
+/* Effet de vague au clic */
+.category-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.category-button:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Élément décoratif */
+.decorative-element {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 80px;
+    height: 80px;
+    border-bottom-left-radius: 24px;
+    opacity: 0.1;
+    transition: var(--transition-smooth);
+}
+
+.category-card.math .decorative-element {
+    background: var(--primary-blue);
+}
+
+.category-card.french .decorative-element {
+    background: var(--primary-green);
+}
+
+.category-card.computer .decorative-element {
+    background: var(--primary-purple);
+}
+
+.category-card:hover .decorative-element {
+    opacity: 0.2;
+    transform: scale(1.1);
+}
+
+/* Section Footer */
+.footer-section {
+    text-align: center;
+    animation: fadeIn 1s ease-out 0.8s both;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.footer-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: white;
+    border-radius: 50px;
+    box-shadow: var(--shadow-light);
+    transition: var(--transition-smooth);
+}
+
+.footer-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-intense);
+}
+
+.footer-badge svg {
+    width: 20px;
+    height: 20px;
+    color: #10b981;
+    margin-right: 0.5rem;
+}
+
+.footer-text {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .quiz-container {
+        padding: 2rem 1rem;
+    }
+
+    .categories-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .category-card {
+        padding: 1.5rem;
+    }
+
+    .main-title {
+        font-size: 2.5rem;
+    }
+
+    .subtitle {
+        font-size: 1.125rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .category-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .category-icon svg {
+        width: 30px;
+        height: 30px;
+    }
+
+    .category-title {
+        font-size: 1.5rem;
+    }
+}
+
+/* Animations de chargement */
+.quiz-container.loaded .category-card {
+    animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) both;
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
