@@ -1,5 +1,5 @@
 <script setup>
-    import { useForm } from '@inertiajs/vue3';
+    import { useForm, Link } from '@inertiajs/vue3';
     import { ref, watch, computed } from 'vue';
 
     const showPassword = ref(false);
@@ -137,6 +137,9 @@
         <button type="submit" :disabled="form.processing">S'inscrire</button>
       </div>
     </form>
+    <div class="text-center">
+      <p>Déjà un compte ? <Link href="/login">Se connecter</Link></p>
+    </div>
   </div>
 </template>
 
@@ -224,5 +227,17 @@ button:disabled {
 }
 .phone-input-wrapper input {
   border-radius: 0 4px 4px 0;
+}
+.text-center {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+.text-center a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: bold;
+}
+.text-center a:hover {
+  text-decoration: underline;
 }
 </style> 
