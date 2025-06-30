@@ -1,5 +1,5 @@
 <script setup>
-    import { useForm } from '@inertiajs/vue3';
+    import { useForm, Link } from '@inertiajs/vue3';
     import { ref, watch, computed } from 'vue';
 
     const showPassword = ref(false);
@@ -28,15 +28,12 @@
     });
 
     const submit = () => {
-    const submissionForm = {
-        ...form,
-        phone: form.phone.replace(/[^0-9]/g, ''),
-    };
-    
-    form.post('/api/register', {
-        ...submissionForm,
+      form.transform(data => ({
+        ...data,
+        phone: data.phone.replace(/[^0-9]/g, ''),
+      })).post('/api/register', {
         onFinish: () => form.reset('password', 'password_confirmation'),
-    });
+      });
     };
 
     const selectedCountry = computed(() => countries.value.find(c => c.code === form.countryCode));
@@ -85,14 +82,17 @@
       <div>
         <label for="firstName">Prénom</label>
         <input id="firstName" v-model="form.firstName" type="text" required>
+        <div v-if="form.errors.firstName" class="error-message">{{ form.errors.firstName }}</div>
       </div>
       <div>
         <label for="lastName">Nom</label>
         <input id="lastName" v-model="form.lastName" type="text" required>
+        <div v-if="form.errors.lastName" class="error-message">{{ form.errors.lastName }}</div>
       </div>
       <div>
         <label for="email">Email</label>
         <input id="email" v-model="form.email" type="email" required>
+        <div v-if="form.errors.email" class="error-message">{{ form.errors.email }}</div>
       </div>
       <div>
         <label for="phone">Téléphone</label>
@@ -104,6 +104,7 @@
           </select>
           <input id="phone" v-model="form.phone" type="tel" inputmode="numeric" :placeholder="selectedCountry?.format" required>
         </div>
+        <div v-if="form.errors.phone" class="error-message">{{ form.errors.phone }}</div>
       </div>
       <div class="password-wrapper">
         <label for="password">Mot de passe</label>
@@ -118,6 +119,7 @@
             <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
           </svg>
         </span>
+        <div v-if="form.errors.password" class="error-message">{{ form.errors.password }}</div>
       </div>
       <div class="password-wrapper">
         <label for="password_confirmation">Confirmation du mot de passe</label>
@@ -137,6 +139,9 @@
         <button type="submit" :disabled="form.processing">S'inscrire</button>
       </div>
     </form>
+    <div class="text-center">
+      <p>Déjà un compte ? <Link href="/login">Se connecter</Link></p>
+    </div>
   </div>
 </template>
 
@@ -224,5 +229,22 @@ button:disabled {
 }
 .phone-input-wrapper input {
   border-radius: 0 4px 4px 0;
+}
+.text-center {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+.text-center a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: bold;
+}
+.text-center a:hover {
+  text-decoration: underline;
+}
+.error-message {
+  color: #dc3545;
+  font-size: 0.875em;
+  margin-top: 0.25rem;
 }
 </style> 
