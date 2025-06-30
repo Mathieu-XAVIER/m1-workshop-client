@@ -23,6 +23,11 @@
     email: '',
     countryCode: '+33',
     phone: '',
+    gender: '',
+    address_line_1: '',
+    address_line_2: '',
+    zip_code: '',
+    city: '',
     password: '',
     password_confirmation: '',
     });
@@ -80,6 +85,16 @@
     <h1>Inscription</h1>
     <form @submit.prevent="submit">
       <div>
+        <label for="gender">Genre</label>
+        <select id="gender" v-model="form.gender" required>
+          <option value="" disabled>-- Veuillez sélectionner --</option>
+          <option value="male">Homme</option>
+          <option value="female">Femme</option>
+          <option value="other">Autre</option>
+        </select>
+        <div v-if="form.errors.gender" class="error-message">{{ form.errors.gender }}</div>
+      </div>
+      <div>
         <label for="firstName">Prénom</label>
         <input id="firstName" v-model="form.firstName" type="text" required>
         <div v-if="form.errors.firstName" class="error-message">{{ form.errors.firstName }}</div>
@@ -105,6 +120,26 @@
           <input id="phone" v-model="form.phone" type="tel" inputmode="numeric" :placeholder="selectedCountry?.format" required>
         </div>
         <div v-if="form.errors.phone" class="error-message">{{ form.errors.phone }}</div>
+      </div>
+      <div>
+        <label for="address_line_1">Adresse (Ligne 1)</label>
+        <input id="address_line_1" v-model="form.address_line_1" type="text" required>
+        <div v-if="form.errors.address_line_1" class="error-message">{{ form.errors.address_line_1 }}</div>
+      </div>
+      <div>
+        <label for="address_line_2">Adresse (Ligne 2)</label>
+        <input id="address_line_2" v-model="form.address_line_2" type="text">
+        <div v-if="form.errors.address_line_2" class="error-message">{{ form.errors.address_line_2 }}</div>
+      </div>
+      <div>
+        <label for="zip_code">Code Postal</label>
+        <input id="zip_code" v-model="form.zip_code" type="text" required>
+        <div v-if="form.errors.zip_code" class="error-message">{{ form.errors.zip_code }}</div>
+      </div>
+      <div>
+        <label for="city">Ville</label>
+        <input id="city" v-model="form.city" type="text" required>
+        <div v-if="form.errors.city" class="error-message">{{ form.errors.city }}</div>
       </div>
       <div class="password-wrapper">
         <label for="password">Mot de passe</label>
@@ -167,13 +202,18 @@ label {
   margin-bottom: 0.5rem;
   font-weight: bold;
 }
-input {
+input, textarea, select {
   width: 100%;
   padding: 0.75rem;
-  padding-right: 40px; /* Espace pour l'icône */
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+  background-color: #fff;
+  font-family: inherit;
+  font-size: 1em;
+}
+textarea {
+  resize: vertical;
 }
 button {
   width: 100%;
@@ -220,14 +260,15 @@ button:disabled {
   display: flex;
 }
 .phone-input-wrapper select {
+  width: 25%;
   padding: 0.75rem;
   border: 1px solid #ccc;
   border-right: none;
   border-radius: 4px 0 0 4px;
   background-color: #f8f9fa;
-  flex-shrink: 0;
 }
 .phone-input-wrapper input {
+  width: 75%;
   border-radius: 0 4px 4px 0;
 }
 .text-center {
