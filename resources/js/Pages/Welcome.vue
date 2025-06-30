@@ -43,40 +43,35 @@
 
     const selectedCountry = computed(() => countries.value.find(c => c.code === form.countryCode));
 
-    watch(() => form.phone, (newValue, oldValue) => {
+    watch(() => form.phone, (newValue) => {
         const country = selectedCountry.value;
         if (!country || !country.format) return;
 
-        let digits = newValue.replace(/[^0-9]/g, '');
+        let digits = newValue.replace(/\D/g, '');
 
         if (digits.length > country.length) {
-        digits = digits.substring(0, country.length);
+            digits = digits.substring(0, country.length);
         }
         
-        if (newValue.length < oldValue.length) {
-        form.phone = newValue;
-        return;
-        }
-
         let formatted = '';
         let digitIndex = 0;
         for (const formatChar of country.format) {
-        if (digitIndex >= digits.length) break;
-        if (formatChar === '#') {
-            formatted += digits[digitIndex];
-            digitIndex++;
-        } else {
-            formatted += formatChar;
-        }
+            if (digitIndex >= digits.length) break;
+            if (formatChar === '#') {
+                formatted += digits[digitIndex];
+                digitIndex++;
+            } else {
+                formatted += formatChar;
+            }
         }
         
-        if (newValue !== formatted) {
-        form.phone = formatted;
+        if (form.phone !== formatted) {
+            form.phone = formatted;
         }
     });
 
     watch(() => form.countryCode, () => {
-    form.phone = '';
+        form.phone = '';
     });
 </script>
 
