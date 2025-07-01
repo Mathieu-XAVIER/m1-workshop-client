@@ -1,11 +1,12 @@
 <?php
 
+use App\Enums\UserGender;
+use App\Enums\UserRole;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,10 +14,24 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('firstname');
+            $table->string('lastname');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('adress_line_1')->nullable();
+            $table->string('adress_line_2')->nullable();
+            $table->string('city')->nullable();
+            $table->string('zip_code')->nullable();
+            $table->enum('role', [
+                UserRole::USER->value,
+                UserRole::ADMIN->value,
+            ])->default(UserRole::USER->value);
+            $table->enum('gender', [
+                UserGender::MALE->value,
+                UserGender::FEMALE->value,
+                UserGender::OTHER->value,
+            ]);
             $table->rememberToken();
             $table->timestamps();
         });
