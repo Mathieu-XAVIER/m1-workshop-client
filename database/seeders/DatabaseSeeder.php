@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserGender;
 use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -20,6 +21,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@admin.com',
             'password' => Hash::make('admin'),
             'role' => UserRole::ADMIN->value,
+            'gender' => UserGender::MALE->value,
         ]);
     }
 }
