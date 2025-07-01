@@ -20,3 +20,7 @@ Route::post('/api/login', function() {
 Route::get('/home', function() {
     return Inertia::render('Home');
 })->name('home');
+
+Route::get('/api-test', function () {
+    return response()->json(['test' => 'ça marche']);
+});
