@@ -89,15 +89,17 @@
         </select>
         <div v-if="form.errors.gender" class="error-message">{{ form.errors.gender }}</div>
       </div>
-      <div>
-        <label for="firstName">Prénom</label>
-        <input id="firstName" v-model="form.firstName" type="text" required>
-        <div v-if="form.errors.firstName" class="error-message">{{ form.errors.firstName }}</div>
-      </div>
-      <div>
-        <label for="lastName">Nom</label>
-        <input id="lastName" v-model="form.lastName" type="text" required>
-        <div v-if="form.errors.lastName" class="error-message">{{ form.errors.lastName }}</div>
+      <div class="name-grid">
+        <div>
+          <label for="firstName">Prénom</label>
+          <input id="firstName" v-model="form.firstName" type="text" required>
+          <div v-if="form.errors.firstName" class="error-message">{{ form.errors.firstName }}</div>
+        </div>
+        <div>
+          <label for="lastName">Nom</label>
+          <input id="lastName" v-model="form.lastName" type="text" required>
+          <div v-if="form.errors.lastName" class="error-message">{{ form.errors.lastName }}</div>
+        </div>
       </div>
       <div>
         <label for="email">Email</label>
@@ -116,25 +118,27 @@
         </div>
         <div v-if="form.errors.phone" class="error-message">{{ form.errors.phone }}</div>
       </div>
-      <div>
-        <label for="address_line_1">Adresse (Ligne 1)</label>
-        <input id="address_line_1" v-model="form.address_line_1" type="text" required>
-        <div v-if="form.errors.address_line_1" class="error-message">{{ form.errors.address_line_1 }}</div>
-      </div>
-      <div>
-        <label for="address_line_2">Adresse (Ligne 2)</label>
-        <input id="address_line_2" v-model="form.address_line_2" type="text">
-        <div v-if="form.errors.address_line_2" class="error-message">{{ form.errors.address_line_2 }}</div>
-      </div>
-      <div>
-        <label for="zip_code">Code Postal</label>
-        <input id="zip_code" v-model="form.zip_code" type="text" required>
-        <div v-if="form.errors.zip_code" class="error-message">{{ form.errors.zip_code }}</div>
-      </div>
-      <div>
-        <label for="city">Ville</label>
-        <input id="city" v-model="form.city" type="text" required>
-        <div v-if="form.errors.city" class="error-message">{{ form.errors.city }}</div>
+      <div class="address-grid">
+        <div>
+          <label for="address_line_1">Adresse (Ligne 1)</label>
+          <input id="address_line_1" v-model="form.address_line_1" type="text" required>
+          <div v-if="form.errors.address_line_1" class="error-message">{{ form.errors.address_line_1 }}</div>
+        </div>
+        <div>
+          <label for="address_line_2">Adresse (Ligne 2)</label>
+          <input id="address_line_2" v-model="form.address_line_2" type="text">
+          <div v-if="form.errors.address_line_2" class="error-message">{{ form.errors.address_line_2 }}</div>
+        </div>
+        <div>
+          <label for="zip_code">Code Postal</label>
+          <input id="zip_code" v-model="form.zip_code" type="text" required>
+          <div v-if="form.errors.zip_code" class="error-message">{{ form.errors.zip_code }}</div>
+        </div>
+        <div>
+          <label for="city">Ville</label>
+          <input id="city" v-model="form.city" type="text" required>
+          <div v-if="form.errors.city" class="error-message">{{ form.errors.city }}</div>
+        </div>
       </div>
       <div class="password-wrapper">
         <label for="password">Mot de passe</label>
@@ -177,7 +181,7 @@
 
 <style scoped>
 .form-container {
-  max-width: 500px;
+  max-width: 50%;
   margin: 50px auto;
   padding: 2rem;
   border: 1px solid #ddd;
@@ -263,8 +267,17 @@ button:disabled {
   background-color: #f8f9fa;
 }
 .phone-input-wrapper input {
-  width: 75%;
+  width: 100%;
   border-radius: 0 4px 4px 0;
+}
+.address-grid, .name-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.address-grid > div, .name-grid > div {
+  margin-bottom: 0;
 }
 .text-center {
   text-align: center;
