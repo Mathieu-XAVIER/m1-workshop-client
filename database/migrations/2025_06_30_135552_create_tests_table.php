@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('tests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('session_id')->constrained('sessions');
+            $table->foreignId('exam_session_id')->constrained('exam_sessions');
             $table->foreignId('quizz_id')->constrained('quizzs');
             $table->foreignId('user_id')->constrained('users');
             $table->integer('nb_pause');
