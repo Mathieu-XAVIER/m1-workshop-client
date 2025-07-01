@@ -4,6 +4,7 @@
 
     const showPassword = ref(false);
     const showPasswordConfirmation = ref(false);
+    const phoneError = ref('');
 
     const countries = ref([
     { name: 'FR (+33)', code: '+33', format: '## ## ## ## ##', length: 10 },
@@ -33,10 +34,14 @@
     });
 
     const submit = () => {
-      form.transform(data => ({
-        ...data,
-        phone: data.phone.replace(/[^0-9]/g, ''),
-      })).post('/api/register', {
+      phoneError.value = '';
+      const country = selectedCountry.value;
+      const digits = form.phone.replace(/\D/g, '');
+      if (country && digits.length !== country.length) {
+        phoneError.value = `Le numéro doit contenir exactement ${country.length} chiffres pour le pays sélectionné.`;
+        return;
+      }
+      form.post('/api/register', {
         onFinish: () => form.reset('password', 'password_confirmation'),
       });
     };
@@ -117,6 +122,7 @@
           <input id="phone" v-model="form.phone" type="tel" inputmode="numeric" :placeholder="selectedCountry?.format" required>
         </div>
         <div v-if="form.errors.phone" class="error-message">{{ form.errors.phone }}</div>
+        <div v-if="phoneError" class="error-message">{{ phoneError }}</div>
       </div>
       <div class="address-grid">
         <div>
