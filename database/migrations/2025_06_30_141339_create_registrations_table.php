@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('registrations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('session_id')->constrained('sessions');
+            $table->foreignId('exam_session_id')->constrained('exam_sessions');
             $table->boolean('no_show');
             $table->foreignId('registered_by')->constrained('users');
             $table->timestamps();
