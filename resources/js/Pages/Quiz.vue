@@ -40,7 +40,7 @@
                 <!-- Simulation H5P -->
                 <div class="quiz-simulation">
                     <h4>📝 Simulation de quiz</h4>
-                    <p>Question {{ Math.floor(currentProgress / 10) + 1 }} / 10</p>
+                    <p>Question {{ Math.floor(currentProgress / 10) }} / 10</p>
                     <button @click="simulateProgress" class="simulate-btn" v-if="currentProgress < 100">
                         Répondre à la question
                     </button>
