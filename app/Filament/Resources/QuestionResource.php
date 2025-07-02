@@ -2,9 +2,12 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\QuestionStatus;
+use App\Enums\QuestionType;
 use App\Filament\Resources\QuestionResource\Pages;
+use App\Filament\Resources\QuestionResource\RelationManagers\BlocsRelationManager;
 use App\Models\Question;
-use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -16,6 +19,7 @@ use Filament\Tables\Actions\ForceDeleteAction;
 use Filament\Tables\Actions\ForceDeleteBulkAction;
 use Filament\Tables\Actions\RestoreAction;
 use Filament\Tables\Actions\RestoreBulkAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
@@ -28,7 +32,11 @@ class QuestionResource extends Resource
 
     protected static ?string $slug = 'questions';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Quizz Management';
+
+    protected static ?string $navigationIcon = 'heroicon-o-question-mark-circle';
+
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {
@@ -37,26 +45,29 @@ class QuestionResource extends Resource
                 TextInput::make('title')
                     ->required(),
 
-                TextInput::make('status')
+                Select::make('status')
+                    ->options(collect(QuestionStatus::cases())
+                        ->mapWithKeys(fn (QuestionStatus $status) => [$status->value => $status->label()]))
                     ->required(),
 
-                TextInput::make('type')
+                Select::make('type')
+                    ->options(collect(QuestionType::cases())
+                        ->mapWithKeys(fn (QuestionType $type) => [$type->value => $type->label()]))
                     ->required(),
 
-                TextInput::make('level')
-                    ->required()
-                    ->integer(),
-
-                TextInput::make('locale')
+                Select::make('level')
+                    ->options([
+                        1 => '1',
+                        2 => '2',
+                        3 => '3',
+                        4 => '4',
+                        5 => '5',
+                        6 => '6',
+                        7 => '7',
+                        8 => '8',
+                        9 => '9',
+                    ])
                     ->required(),
-
-                Placeholder::make('created_at')
-                    ->label('Created Date')
-                    ->content(fn(?Question $record): string => $record?->created_at?->diffForHumans() ?? '-'),
-
-                Placeholder::make('updated_at')
-                    ->label('Last Modified Date')
-                    ->content(fn(?Question $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 
@@ -68,15 +79,31 @@ class QuestionResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('status'),
+                TextColumn::make('type')
+                    ->formatStateUsing(fn(QuestionType $state): string => $state->label())
+                    ->searchable()
+                    ->sortable(),
 
-                TextColumn::make('type'),
+                IconColumn::make('status')
+                    ->icon(fn(QuestionStatus $state): string => match ($state) {
+                        QuestionStatus::PENDING => 'heroicon-o-clock',
+                        QuestionStatus::APPROVED => 'heroicon-o-check-circle',
+                        QuestionStatus::REJECTED => 'heroicon-o-x-circle',
+                    })
+                    ->color(fn(QuestionStatus $state): string => match ($state) {
+                        QuestionStatus::PENDING => 'warning',
+                        QuestionStatus::APPROVED => 'success',
+                        QuestionStatus::REJECTED => 'danger',
+                    })
+                    ->tooltip(fn(QuestionStatus $state): string => $state->label()),
 
-                TextColumn::make('level'),
+                TextColumn::make('level')
+                    ->sortable()
+                    ->label('Niveau'),
 
-                TextColumn::make('answer'),
-
-                TextColumn::make('locale'),
+                TextColumn::make('blocs_count')
+                    ->counts('blocs')
+                    ->label('Utilisée dans'),
             ])
             ->filters([
                 TrashedFilter::make(),
@@ -102,6 +129,13 @@ class QuestionResource extends Resource
             'index' => Pages\ListQuestions::route('/'),
             'create' => Pages\CreateQuestion::route('/create'),
             'edit' => Pages\EditQuestion::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            BlocsRelationManager::class,
         ];
     }
 

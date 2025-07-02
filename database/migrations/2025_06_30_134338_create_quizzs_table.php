@@ -10,7 +10,6 @@ return new class extends Migration {
         Schema::create('quizzs', function (Blueprint $table) {
             $table->id();
             $table->string('subject');
-            $table->string('locale');
             $table->timestamps();
             $table->softDeletes();
         });

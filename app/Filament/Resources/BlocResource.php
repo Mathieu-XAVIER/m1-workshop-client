@@ -3,9 +3,11 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\BlocResource\Pages;
+use App\Filament\Resources\BlocResource\RelationManagers\QuestionsRelationManager;
 use App\Models\Bloc;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\BulkActionGroup;
@@ -28,7 +30,11 @@ class BlocResource extends Resource
 
     protected static ?string $slug = 'blocs';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Quizz Management';
+
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-group';
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
@@ -37,23 +43,11 @@ class BlocResource extends Resource
                 TextInput::make('name')
                     ->required(),
 
-                TextInput::make('locale')
+                Select::make('quizz_id')
+                    ->relationship('quizz', 'subject')
+                    ->searchable()
+                    ->preload()
                     ->required(),
-
-                TextInput::make('nb_questions')
-                    ->required(),
-
-                TextInput::make('quizz_id')
-                    ->required()
-                    ->integer(),
-
-                Placeholder::make('created_at')
-                    ->label('Created Date')
-                    ->content(fn(?Bloc $record): string => $record?->created_at?->diffForHumans() ?? '-'),
-
-                Placeholder::make('updated_at')
-                    ->label('Last Modified Date')
-                    ->content(fn(?Bloc $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 
@@ -65,11 +59,12 @@ class BlocResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('locale'),
+                TextColumn::make('questions_count')
+                    ->counts('questions')
+                    ->label('Nombre de questions'),
 
-                TextColumn::make('nb_questions'),
-
-                TextColumn::make('quizz_id'),
+                TextColumn::make('quizz.subject')
+                    ->searchable(),
             ])
             ->filters([
                 TrashedFilter::make(),
@@ -95,6 +90,13 @@ class BlocResource extends Resource
             'index' => Pages\ListBlocs::route('/'),
             'create' => Pages\CreateBloc::route('/create'),
             'edit' => Pages\EditBloc::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            QuestionsRelationManager::class,
         ];
     }
 

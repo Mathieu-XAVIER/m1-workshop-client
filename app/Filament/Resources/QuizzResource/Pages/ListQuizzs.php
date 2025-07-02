@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\QuizzResource\Pages;
 
 use App\Filament\Resources\QuizzResource;
-use Filament\Actions\CreateAction;
+use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListQuizzs extends ListRecords
@@ -13,7 +13,7 @@ class ListQuizzs extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            Actions\CreateAction::make(),
         ];
     }
 }

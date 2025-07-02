@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('adress_line_1');
-            $table->string('adress_line_2');
+            $table->string('adress_line_2')->nullable();
             $table->string('city');
             $table->string('zip_code');
             $table->timestamps();

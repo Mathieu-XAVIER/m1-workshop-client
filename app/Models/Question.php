@@ -6,6 +6,7 @@ use App\Enums\QuestionStatus;
 use App\Enums\QuestionType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Question extends Model
@@ -19,7 +20,6 @@ class Question extends Model
         'level',
         'content',
         'answer',
-        'locale',
     ];
 
     protected function casts(): array
@@ -30,5 +30,10 @@ class Question extends Model
             'status' => QuestionStatus::class,
             'type' => QuestionType::class,
         ];
+    }
+
+    public function blocs(): BelongsToMany
+    {
+        return $this->belongsToMany(Bloc::class, 'bloc_question');
     }
 }

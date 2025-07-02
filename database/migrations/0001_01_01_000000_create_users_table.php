@@ -14,16 +14,16 @@ return new class extends Migration {
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('firstname')->required();
-            $table->string('lastname')->required();
-            $table->string('email')->unique()->required();
+            $table->string('firstname');
+            $table->string('lastname');
+            $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('phone')->required();
-            $table->string('password')->required();
-            $table->string('address_line_1')->required();
-            $table->string('address_line_2')->nullable();
-            $table->string('city')->required();
-            $table->string('zip_code')->required();
+            $table->string('password');
+            $table->string('phone')->nullable();
+            $table->string('adress_line_1')->nullable();
+            $table->string('adress_line_2')->nullable();
+            $table->string('city')->nullable();
+            $table->string('zip_code')->nullable();
             $table->enum('role', [
                 UserRole::USER->value,
                 UserRole::ADMIN->value,
@@ -51,10 +51,6 @@ return new class extends Migration {
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
-
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('address_line_2')->nullable()->change();
-        });
     }
 
     /**
@@ -65,9 +61,5 @@ return new class extends Migration {
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
-
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('address_line_2')->nullable(false)->change();
-        });
     }
 };
