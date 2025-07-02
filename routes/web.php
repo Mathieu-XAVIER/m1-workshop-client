@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\RegistrationController;
+use App\Http\Controllers\QuestionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\QuizController;
@@ -37,6 +38,11 @@ Route::post('/api/login', function(Request $request) {
 Route::get('/home', function() {
     return Inertia::render('Home');
 })->name('home');
+
+// Routes questions
+Route::get('/questions', [QuestionController::class, 'index'])->name('questions.index');
+Route::get('/questions/{id}', [QuestionController::class, 'show'])->name('questions.show');
+Route::post('/questions/{id}/check-answer', [QuestionController::class, 'checkAnswer'])->name('questions.check-answer');
 
 // ===============================================
 // 🎯 Routes du système Quiz avec contrôleur
