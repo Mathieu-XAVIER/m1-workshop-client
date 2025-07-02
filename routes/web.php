@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\RegistrationController;
+use App\Http\Controllers\QuestionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -21,6 +22,7 @@ Route::get('/home', function() {
     return Inertia::render('Home');
 })->name('home');
 
-Route::get('/api-test', function () {
-    return response()->json(['test' => 'ça marche']);
-});
+// Routes utilisateur SEULEMENT
+Route::get('/questions', [QuestionController::class, 'index'])->name('questions.index');
+Route::get('/questions/{id}', [QuestionController::class, 'show'])->name('questions.show');
+Route::post('/questions/{id}/check-answer', [QuestionController::class, 'checkAnswer'])->name('questions.check-answer');

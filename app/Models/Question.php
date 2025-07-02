@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\QuestionStatus;
+use App\Enums\QuestionType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -25,6 +27,8 @@ class Question extends Model
         return [
             'content' => 'array',
             'answer' => 'array',
+            'status' => QuestionStatus::class,
+            'type' => QuestionType::class,
         ];
     }
 }
