@@ -8,6 +8,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -27,6 +28,7 @@ class User extends Authenticatable implements FilamentUser, HasName
         'firstname',
         'email',
         'password',
+        'phone',
         'role'
     ];
 
@@ -62,5 +64,12 @@ class User extends Authenticatable implements FilamentUser, HasName
     public function canAccessPanel(Panel $panel): bool
     {
         return $this->role === UserRole::ADMIN;
+    }
+
+    public function trainings(): BelongsToMany
+    {
+        return $this->belongsToMany(Training::class, 'user_training')
+            ->withPivot('status')
+            ->withTimestamps();
     }
 }

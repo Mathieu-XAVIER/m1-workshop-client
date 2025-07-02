@@ -13,11 +13,11 @@ enum QuestionType: string
     public function label(): string
     {
         return match ($this) {
-            self::MULTIPLE_CHOICE => trans('questions_enum.type_multiple_choice'),
-            self::TRUE_FALSE => trans('questions_enum.type_true_false'),
-            self::FILL_IN_THE_BLANK => trans('questions_enum.type_fill_in_the_blank'),
-            self::SHORT_ANSWER => trans('questions_enum.type_short_answer'),
-            self::LONG_ANSWER => trans('questions_enum.type_long_answer'),
+            self::MULTIPLE_CHOICE => 'Choix multiple',
+            self::TRUE_FALSE => 'Vrai ou Faux',
+            self::FILL_IN_THE_BLANK => 'Remplir le blanc',
+            self::SHORT_ANSWER => 'Réponse courte',
+            self::LONG_ANSWER => 'Réponse longue',
         };
     }
 }

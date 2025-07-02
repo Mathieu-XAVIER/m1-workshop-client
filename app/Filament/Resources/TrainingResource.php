@@ -30,23 +30,13 @@ class TrainingResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationGroup = 'Training Management';
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 TextInput::make('name')
                     ->required(),
-
-                TextInput::make('locale')
-                    ->required(),
-
-                Placeholder::make('created_at')
-                    ->label('Created Date')
-                    ->content(fn(?Training $record): string => $record?->created_at?->diffForHumans() ?? '-'),
-
-                Placeholder::make('updated_at')
-                    ->label('Last Modified Date')
-                    ->content(fn(?Training $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 
@@ -58,7 +48,6 @@ class TrainingResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('locale'),
             ])
             ->filters([
                 TrashedFilter::make(),

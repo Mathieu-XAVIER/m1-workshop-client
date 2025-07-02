@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\QuestionStatus;
+use App\Enums\QuestionType;
 use App\Filament\Resources\QuestionResource\Pages;
 use App\Filament\Resources\QuestionResource\RelationManagers\BlocsRelationManager;
 use App\Models\Question;
@@ -16,6 +18,7 @@ use Filament\Tables\Actions\ForceDeleteAction;
 use Filament\Tables\Actions\ForceDeleteBulkAction;
 use Filament\Tables\Actions\RestoreAction;
 use Filament\Tables\Actions\RestoreBulkAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
@@ -61,11 +64,27 @@ class QuestionResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('status'),
+                TextColumn::make('type')
+                    ->formatStateUsing(fn(QuestionType $state): string => $state->label())
+                    ->searchable()
+                    ->sortable(),
 
-                TextColumn::make('type'),
+                IconColumn::make('status')
+                    ->icon(fn(QuestionStatus $state): string => match ($state) {
+                        QuestionStatus::PENDING => 'heroicon-o-clock',
+                        QuestionStatus::APPROVED => 'heroicon-o-check-circle',
+                        QuestionStatus::REJECTED => 'heroicon-o-x-circle',
+                    })
+                    ->color(fn(QuestionStatus $state): string => match ($state) {
+                        QuestionStatus::PENDING => 'warning',
+                        QuestionStatus::APPROVED => 'success',
+                        QuestionStatus::REJECTED => 'danger',
+                    })
+                    ->tooltip(fn(QuestionStatus $state): string => $state->label()),
 
-                TextColumn::make('level'),
+                TextColumn::make('level')
+                    ->sortable()
+                    ->label('Niveau'),
 
                 TextColumn::make('blocs_count')
                     ->counts('blocs')
