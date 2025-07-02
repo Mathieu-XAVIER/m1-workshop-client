@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserGender;
+use App\Enums\UserRole;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +15,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'firstname' => 'Super',
+            'lastname' => 'Admin',
+            'email' => 'admin@admin.com',
+            'password' => Hash::make('admin'),
+            'role' => UserRole::ADMIN->value,
+            'gender' => UserGender::MALE->value,
         ]);
     }
 }

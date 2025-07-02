@@ -4,6 +4,9 @@ use App\Http\Controllers\Auth\RegistrationController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\QuizController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
@@ -14,8 +17,21 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::post('/api/register', [RegistrationController::class, 'store'])->name('register');
-Route::post('/api/login', function() {
-    // Logique de connexion à implémenter par l'équipe back-end
+
+Route::post('/api/login', function(Request $request) {
+    $credentials = $request->validate([
+        'email' => ['required', 'email'],
+        'password' => ['required'],
+    ]);
+
+    if (Auth::attempt($credentials)) {
+        $request->session()->regenerate();
+        return redirect()->intended('/home');
+    }
+
+    throw ValidationException::withMessages([
+        'email' => 'Les identifiants fournis sont incorrects.',
+    ]);
 })->name('login.store');
 
 Route::get('/home', function() {

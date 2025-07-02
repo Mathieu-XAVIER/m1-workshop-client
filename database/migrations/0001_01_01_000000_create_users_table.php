@@ -1,11 +1,12 @@
 <?php
 
+use App\Enums\UserGender;
+use App\Enums\UserRole;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,10 +14,25 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->string('firstname')->required();
+            $table->string('lastname')->required();
+            $table->string('email')->unique()->required();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('phone')->required();
+            $table->string('password')->required();
+            $table->string('address_line_1')->required();
+            $table->string('address_line_2')->nullable();
+            $table->string('city')->required();
+            $table->string('zip_code')->required();
+            $table->enum('role', [
+                UserRole::USER->value,
+                UserRole::ADMIN->value,
+            ])->default(UserRole::USER->value);
+            $table->enum('gender', [
+                UserGender::MALE->value,
+                UserGender::FEMALE->value,
+                UserGender::OTHER->value,
+            ]);
             $table->rememberToken();
             $table->timestamps();
         });
@@ -35,6 +51,10 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('address_line_2')->nullable()->change();
+        });
     }
 
     /**
@@ -45,5 +65,9 @@ return new class extends Migration
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('address_line_2')->nullable(false)->change();
+        });
     }
 };
