@@ -3,9 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\QuizzResource\Pages;
+use App\Filament\Resources\QuizzResource\RelationManagers\BlocsRelationManager;
 use App\Models\Quizz;
+use Exception;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\BulkActionGroup;
@@ -28,7 +31,11 @@ class QuizzResource extends Resource
 
     protected static ?string $slug = 'quizzs';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Quizz Management';
+
+    protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
@@ -36,27 +43,23 @@ class QuizzResource extends Resource
             ->schema([
                 TextInput::make('subject')
                     ->required(),
-
-                TextInput::make('locale')
-                    ->required(),
-
-                Placeholder::make('created_at')
-                    ->label('Created Date')
-                    ->content(fn(?Quizz $record): string => $record?->created_at?->diffForHumans() ?? '-'),
-
-                Placeholder::make('updated_at')
-                    ->label('Last Modified Date')
-                    ->content(fn(?Quizz $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 
+    /**
+     * @throws Exception
+     */
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('subject'),
+                TextColumn::make('subject')
+                    ->searchable()
+                    ->sortable(),
 
-                TextColumn::make('locale'),
+                TextColumn::make('blocs_count')
+                    ->counts('blocs')
+                    ->label('Nombre de blocs'),
             ])
             ->filters([
                 TrashedFilter::make(),
@@ -85,6 +88,13 @@ class QuizzResource extends Resource
         ];
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            BlocsRelationManager::class,
+        ];
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
@@ -95,6 +105,6 @@ class QuizzResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-        return [];
+        return ['subject'];
     }
 }

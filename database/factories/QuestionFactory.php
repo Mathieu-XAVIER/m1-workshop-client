@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Enums\QuestionStatus;
+use App\Enums\QuestionType;
 use App\Models\Question;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
@@ -14,14 +16,13 @@ class QuestionFactory extends Factory
     {
         return [
             'title' => $this->faker->word(),
-            'status' => $this->faker->word(),
-            'type' => $this->faker->word(),
+            'status' => $this->faker->randomElement(QuestionStatus::cases()),
+            'type' => $this->faker->randomElement(QuestionType::cases()),
             'level' => $this->faker->randomNumber(),
             'content' => $this->faker->words(),
             'answer' => $this->faker->words(),
-            'locale' => $this->faker->word(),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }

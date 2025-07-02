@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Bloc extends Model
@@ -13,7 +14,6 @@ class Bloc extends Model
 
     protected $fillable = [
         'name',
-        'locale',
         'nb_questions',
         'quizz_id',
     ];
@@ -21,5 +21,10 @@ class Bloc extends Model
     public function quizz(): BelongsTo
     {
         return $this->belongsTo(Quizz::class);
+    }
+
+    public function questions(): BelongsToMany
+    {
+        return $this->belongsToMany(Question::class, 'bloc_question');
     }
 }

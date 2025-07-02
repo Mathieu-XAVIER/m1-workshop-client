@@ -27,7 +27,6 @@ return new class extends Migration {
             $table->integer('level');
             $table->json('content');
             $table->json('answer');
-            $table->string('locale')->default('fr');
             $table->timestamps();
             $table->softDeletes();
         });

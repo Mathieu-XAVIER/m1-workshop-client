@@ -10,7 +10,6 @@ return new class extends Migration {
         Schema::create('blocs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('locale');
             $table->string('nb_questions');
             $table->foreignId('quizz_id')->constrained('quizzs');
             $table->timestamps();

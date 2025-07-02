@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\LocationResource\Pages;
-use App\Models\location;
+use App\Models\Location;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -24,11 +24,21 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class LocationResource extends Resource
 {
-    protected static ?string $model = location::class;
+    protected static ?string $model = Location::class;
 
     protected static ?string $slug = 'locations';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    public static function getModelLabel(): string
+    {
+        return __('Lieu');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Lieux');
+    }
+
+    protected static ?string $navigationIcon = 'heroicon-o-map';
 
     public static function form(Form $form): Form
     {
@@ -40,22 +50,13 @@ class LocationResource extends Resource
                 TextInput::make('adress_line_1')
                     ->required(),
 
-                TextInput::make('adress_line_2')
-                    ->required(),
+                TextInput::make('adress_line_2'),
 
                 TextInput::make('city')
                     ->required(),
 
                 TextInput::make('zip_code')
                     ->required(),
-
-                Placeholder::make('created_at')
-                    ->label('Created Date')
-                    ->content(fn(?location $record): string => $record?->created_at?->diffForHumans() ?? '-'),
-
-                Placeholder::make('updated_at')
-                    ->label('Last Modified Date')
-                    ->content(fn(?location $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 

@@ -3,8 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\QuestionResource\Pages;
+use App\Filament\Resources\QuestionResource\RelationManagers\BlocsRelationManager;
 use App\Models\Question;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -28,7 +28,11 @@ class QuestionResource extends Resource
 
     protected static ?string $slug = 'questions';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Quizz Management';
+
+    protected static ?string $navigationIcon = 'heroicon-o-question-mark-circle';
+
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {
@@ -46,17 +50,6 @@ class QuestionResource extends Resource
                 TextInput::make('level')
                     ->required()
                     ->integer(),
-
-                TextInput::make('locale')
-                    ->required(),
-
-                Placeholder::make('created_at')
-                    ->label('Created Date')
-                    ->content(fn(?Question $record): string => $record?->created_at?->diffForHumans() ?? '-'),
-
-                Placeholder::make('updated_at')
-                    ->label('Last Modified Date')
-                    ->content(fn(?Question $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 
@@ -74,9 +67,9 @@ class QuestionResource extends Resource
 
                 TextColumn::make('level'),
 
-                TextColumn::make('answer'),
-
-                TextColumn::make('locale'),
+                TextColumn::make('blocs_count')
+                    ->counts('blocs')
+                    ->label('Utilisée dans'),
             ])
             ->filters([
                 TrashedFilter::make(),
@@ -102,6 +95,13 @@ class QuestionResource extends Resource
             'index' => Pages\ListQuestions::route('/'),
             'create' => Pages\CreateQuestion::route('/create'),
             'edit' => Pages\EditQuestion::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            BlocsRelationManager::class,
         ];
     }
 
