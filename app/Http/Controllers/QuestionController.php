@@ -15,8 +15,7 @@ class QuestionController extends Controller
     public function index(): Response
     {
         return Inertia::render('Questions/Index', [
-            'questions' => Question::select(['id', 'title', 'type', 'level', 'status', 'created_at'])
-                ->where('status', 'approved')
+            'questions' => Question::where('status', 'approved')
                 ->orderBy('created_at', 'desc')
                 ->get()
         ]);
@@ -27,9 +26,6 @@ class QuestionController extends Controller
      */
     public function show($id): Response
     {
-        $question = Question::where('status', 'approved')
-        ->findOrFail($id);
-
         return Inertia::render('Questions/Show', [
             'question' => Question::where('status', 'approved')->findOrFail($id),
             'quizResult' => session('quiz_result'),
