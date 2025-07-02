@@ -1,57 +1,56 @@
-<script setup>
-    import { Link, useForm } from '@inertiajs/vue3';
-    import { ref } from 'vue';
-
-    const showPassword = ref(false);
-
-    const form = useForm({
-    email: '',
-    password: '',
-    });
-
-    const submit = () => {
-    form.post('/api/login');
-    };
-</script>
-
 <template>
   <div class="form-container">
-    <h1>Connexion</h1>
+    <h1>Réinitialiser le mot de passe</h1>
     <form @submit.prevent="submit">
+      <input type="hidden" v-model="form.token" />
       <div>
         <label for="email">Email</label>
         <input id="email" v-model="form.email" type="email" required>
         <div v-if="form.errors.email" class="error-message">{{ form.errors.email }}</div>
       </div>
-
-      <div class="password-wrapper">
-        <label for="password">Mot de passe</label>
-        <input id="password" v-model="form.password" :type="showPassword ? 'text' : 'password'" required>
-        <span class="toggle-password" @click="showPassword = !showPassword">
-          <svg v-if="!showPassword" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
-            <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
-          </svg>
-          <svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-            <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 0-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588M5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
-            <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
-          </svg>
-        </span>
+      <div>
+        <label for="password">Nouveau mot de passe</label>
+        <input id="password" v-model="form.password" type="password" required>
         <div v-if="form.errors.password" class="error-message">{{ form.errors.password }}</div>
       </div>
-      
       <div>
-        <button type="submit" :disabled="form.processing">Se connecter</button>
+        <label for="password_confirmation">Confirmation</label>
+        <input id="password_confirmation" v-model="form.password_confirmation" type="password" required>
+        <div v-if="form.errors.password_confirmation" class="error-message">{{ form.errors.password_confirmation }}</div>
       </div>
+      <div>
+        <button type="submit" :disabled="form.processing">Réinitialiser</button>
+      </div>
+      <div v-if="status" class="success-message">{{ status }}</div>
     </form>
-    <div class="text-center">
-      <p>Pas encore de compte ? <Link href="/">S'inscrire</Link></p>
-    </div>
     <div class="text-center" style="margin-top: 1rem;">
-      <Link href="/forgot-password">Mot de passe oublié ?</Link>
+      <Link href="/login">Retour à la connexion</Link>
     </div>
   </div>
 </template>
+
+<script setup>
+import { Link, useForm, usePage } from '@inertiajs/vue3';
+import { ref } from 'vue';
+
+const page = usePage();
+const status = ref('');
+const form = useForm({
+  token: page.props.token || '',
+  email: page.props.email || '',
+  password: '',
+  password_confirmation: '',
+});
+
+const submit = () => {
+  form.post('/reset-password', {
+    onSuccess: () => {
+      status.value = 'Votre mot de passe a été réinitialisé. Vous pouvez maintenant vous connecter.';
+      form.reset();
+    }
+  });
+};
+</script>
 
 <style scoped>
 .form-container {

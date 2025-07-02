@@ -22,9 +22,9 @@ class Registration extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function session(): BelongsTo
+    public function examSession(): BelongsTo
     {
-        return $this->belongsTo(ExamSession::class);
+        return $this->belongsTo(ExamSession::class, 'session_id');
     }
 
     public function registeredBy(): BelongsTo

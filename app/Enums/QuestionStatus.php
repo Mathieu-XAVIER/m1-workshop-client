@@ -11,9 +11,9 @@ enum QuestionStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::PENDING => trans('questions_enum.status_pending'),
-            self::APPROVED => trans('questions_enum.status_approved'),
-            self::REJECTED => trans('questions_enum.status_rejected'),
+            self::PENDING => 'En attente',
+            self::APPROVED => 'Approuvé',
+            self::REJECTED => 'Rejeté',
         };
     }
 }

@@ -41,6 +41,8 @@ class AdminPanelProvider extends PanelProvider
                     ->label('Quizz Management'),
                 NavigationGroup::make()
                     ->label('Training Management'),
+                NavigationGroup::make()
+                    ->label('Exams Management'),
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([

@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('blocs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('nb_questions');
+            $table->string('nb_questions')->default('0');
             $table->foreignId('quizz_id')->constrained('quizzs');
             $table->timestamps();
             $table->softDeletes();

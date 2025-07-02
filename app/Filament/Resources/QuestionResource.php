@@ -7,6 +7,7 @@ use App\Enums\QuestionType;
 use App\Filament\Resources\QuestionResource\Pages;
 use App\Filament\Resources\QuestionResource\RelationManagers\BlocsRelationManager;
 use App\Models\Question;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -44,15 +45,29 @@ class QuestionResource extends Resource
                 TextInput::make('title')
                     ->required(),
 
-                TextInput::make('status')
+                Select::make('status')
+                    ->options(collect(QuestionStatus::cases())
+                        ->mapWithKeys(fn (QuestionStatus $status) => [$status->value => $status->label()]))
                     ->required(),
 
-                TextInput::make('type')
+                Select::make('type')
+                    ->options(collect(QuestionType::cases())
+                        ->mapWithKeys(fn (QuestionType $type) => [$type->value => $type->label()]))
                     ->required(),
 
-                TextInput::make('level')
-                    ->required()
-                    ->integer(),
+                Select::make('level')
+                    ->options([
+                        1 => '1',
+                        2 => '2',
+                        3 => '3',
+                        4 => '4',
+                        5 => '5',
+                        6 => '6',
+                        7 => '7',
+                        8 => '8',
+                        9 => '9',
+                    ])
+                    ->required(),
             ]);
     }
 

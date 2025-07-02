@@ -17,11 +17,11 @@ class Test extends Model
 
     public function session(): BelongsTo
     {
-        return $this->belongsTo(ExamSession::class);
+        return $this->belongsTo(ExamSession::class, 'session_id');
     }
 
     public function quizz(): BelongsTo
     {
-        return $this->belongsTo(Quizz::class);
+        return $this->belongsTo(Quizz::class, 'quizz_id');
     }
 }

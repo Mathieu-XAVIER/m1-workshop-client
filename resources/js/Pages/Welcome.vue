@@ -4,6 +4,7 @@
 
     const showPassword = ref(false);
     const showPasswordConfirmation = ref(false);
+    const phoneError = ref('');
 
     const countries = ref([
     { name: 'FR (+33)', code: '+33', format: '## ## ## ## ##', length: 10 },
@@ -33,10 +34,20 @@
     });
 
     const submit = () => {
-      form.transform(data => ({
-        ...data,
-        phone: data.phone.replace(/[^0-9]/g, ''),
-      })).post('/api/register', {
+      form.address_line_1 = document.getElementById('address_line_1').value;
+      form.address_line_2 = document.getElementById('address_line_2').value;
+      form.zip_code = document.getElementById('zip_code').value;
+      form.city = document.getElementById('city').value;
+      form.phone = document.getElementById('phone').value;
+
+      phoneError.value = '';
+      const country = selectedCountry.value;
+      const digits = form.phone.replace(/\D/g, '');
+      if (country && digits.length !== country.length) {
+        phoneError.value = `Le numéro doit contenir exactement ${country.length} chiffres pour le pays sélectionné.`;
+        return;
+      }
+      form.post('/api/register', {
         onFinish: () => form.reset('password', 'password_confirmation'),
       });
     };
@@ -117,26 +128,27 @@
           <input id="phone" v-model="form.phone" type="tel" inputmode="numeric" :placeholder="selectedCountry?.format" required>
         </div>
         <div v-if="form.errors.phone" class="error-message">{{ form.errors.phone }}</div>
+        <div v-if="phoneError" class="error-message">{{ phoneError }}</div>
       </div>
       <div class="address-grid">
         <div>
           <label for="address_line_1">Adresse (Ligne 1)</label>
-          <input id="address_line_1" v-model="form.address_line_1" type="text" required>
+          <input id="address_line_1" v-model="form.address_line_1" type="text" required autocomplete="address-line1" @change="form.address_line_1 = $event.target.value">
           <div v-if="form.errors.address_line_1" class="error-message">{{ form.errors.address_line_1 }}</div>
         </div>
         <div>
           <label for="address_line_2">Adresse (Ligne 2)</label>
-          <input id="address_line_2" v-model="form.address_line_2" type="text">
+          <input id="address_line_2" v-model="form.address_line_2" type="text" autocomplete="address-line2" @change="form.address_line_2 = $event.target.value">
           <div v-if="form.errors.address_line_2" class="error-message">{{ form.errors.address_line_2 }}</div>
         </div>
         <div>
           <label for="zip_code">Code Postal</label>
-          <input id="zip_code" v-model="form.zip_code" type="text" required>
+          <input id="zip_code" v-model="form.zip_code" type="text" required autocomplete="postal-code" @change="form.zip_code = $event.target.value">
           <div v-if="form.errors.zip_code" class="error-message">{{ form.errors.zip_code }}</div>
         </div>
         <div>
           <label for="city">Ville</label>
-          <input id="city" v-model="form.city" type="text" required>
+          <input id="city" v-model="form.city" type="text" required autocomplete="address-level2" @change="form.city = $event.target.value">
           <div v-if="form.errors.city" class="error-message">{{ form.errors.city }}</div>
         </div>
       </div>

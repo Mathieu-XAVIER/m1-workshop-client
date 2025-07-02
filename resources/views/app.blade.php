@@ -6,8 +6,9 @@
     <title>Bilan de compétences</title>
     @vite('resources/js/app.js')
     @inertiaHead
+    <meta name="csrf-token" content="{{ csrf_token() }}">
   </head>
   <body>
     @inertia
   </body>
-</html> 
+</html>
