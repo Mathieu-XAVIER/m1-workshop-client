@@ -6,7 +6,6 @@ use App\Enums\BlocQuestionSkill;
 use App\Filament\Resources\BlocResource\Pages;
 use App\Filament\Resources\BlocResource\RelationManagers\QuestionsRelationManager;
 use App\Models\Bloc;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
