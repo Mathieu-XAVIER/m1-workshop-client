@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\RegistrationController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\QuizController;
@@ -12,9 +13,10 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Str;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome');
-})->name('welcome');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::get('/quiz', [QuizController::class, 'listing'])->name('quiz.listing');
+Route::get('/quiz/{quizz}', [QuizController::class, 'show'])->name('quiz.show');
 
 Route::get('/login', function () {
     return Inertia::render('Login');
@@ -22,7 +24,7 @@ Route::get('/login', function () {
 
 Route::post('/api/register', [RegistrationController::class, 'store'])->name('register');
 
-Route::post('/api/login', function(Request $request) {
+Route::post('/api/login', function (Request $request) {
     $credentials = $request->validate([
         'email' => ['required', 'email'],
         'password' => ['required'],
@@ -38,12 +40,10 @@ Route::post('/api/login', function(Request $request) {
     ]);
 })->name('login.store');
 
-// Affiche le formulaire de demande de reset
 Route::get('/forgot-password', function () {
     return Inertia::render('ForgotPassword');
 })->name('password.request');
 
-// Traite la demande de reset (envoie le mail)
 Route::post('/forgot-password', function (Request $request) {
     $request->validate(['email' => 'required|email']);
 
@@ -54,7 +54,6 @@ Route::post('/forgot-password', function (Request $request) {
     return back()->with('status', __($status));
 })->name('password.email');
 
-// Affiche le formulaire de nouveau mot de passe (depuis le lien du mail)
 Route::get('/reset-password/{token}', function (Request $request, $token) {
     return Inertia::render('ResetPassword', [
         'token' => $token,
@@ -62,7 +61,6 @@ Route::get('/reset-password/{token}', function (Request $request, $token) {
     ]);
 })->name('password.reset');
 
-// Traite la soumission du nouveau mot de passe
 Route::post('/reset-password', function (Request $request) {
     $request->validate([
         'token' => 'required',
@@ -87,37 +85,3 @@ Route::post('/reset-password', function (Request $request) {
         ? redirect()->route('login')->with('status', __($status))
         : back()->withErrors(['email' => [__($status)]]);
 })->name('password.update');
-
-
-
-Route::get('/home', function() {
-    return Inertia::render('Home');
-})->name('home');
-
-// ===============================================
-// 🎯 Routes du système Quiz avec contrôleur
-// ===============================================
-
-// Routes principales des quiz
-Route::get('/quiz', [QuizController::class, 'index'])->name('quiz.index');
-Route::get('/quiz/{category}', [QuizController::class, 'show'])->name('quiz.category');
-
-// ===============================================
-// 🎯 API Routes pour le système Quiz
-// ===============================================
-
-Route::prefix('api/quiz')->group(function() {
-    // Gestion de la progression
-    Route::post('/{category}/progress', [QuizController::class, 'saveProgress'])->name('quiz.progress.save');
-    Route::get('/{category}/progress', [QuizController::class, 'getProgress'])->name('quiz.progress.get');
-
-    // Gestion des résultats
-    Route::post('/{category}/results', [QuizController::class, 'submitResults'])->name('quiz.results.submit');
-
-    // Actions sur les quiz
-    Route::post('/{category}/restart', [QuizController::class, 'restart'])->name('quiz.restart');
-
-    // Statistiques
-    Route::get('/stats', [QuizController::class, 'getStats'])->name('quiz.stats.global');
-    Route::get('/{category}/stats', [QuizController::class, 'getStats'])->name('quiz.stats.category');
-});

@@ -41,6 +41,11 @@ class QuizzResource extends Resource
     {
         return $form
             ->schema([
+                TextInput::make('title')
+                    ->required()
+                    ->maxLength(255)
+                    ->label('Titre du quizz'),
+
                 TextInput::make('subject')
                     ->required(),
             ]);
@@ -53,6 +58,11 @@ class QuizzResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('title')
+                    ->searchable()
+                    ->sortable()
+                    ->label('Titre'),
+
                 TextColumn::make('subject')
                     ->searchable()
                     ->sortable(),
