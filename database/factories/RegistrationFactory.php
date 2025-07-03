@@ -18,9 +18,8 @@ class RegistrationFactory extends Factory
             'no_show' => $this->faker->boolean(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-
             'user_id' => User::factory(),
-            'session_id' => ExamSession::factory(),
+            'exam_session_id' => ExamSession::factory(),
             'registered_by' => User::factory(),
         ];
     }

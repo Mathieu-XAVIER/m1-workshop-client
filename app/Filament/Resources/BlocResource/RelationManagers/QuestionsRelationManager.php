@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\QuestionResource\RelationManagers;
+namespace App\Filament\Resources\BlocResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -8,7 +8,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-class BlocsRelationManager extends RelationManager
+class QuestionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'blocs';
 

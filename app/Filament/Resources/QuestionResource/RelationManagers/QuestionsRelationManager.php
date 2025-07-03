@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\BlocResource\RelationManagers;
+namespace App\Filament\Resources\QuestionResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Forms\Form;

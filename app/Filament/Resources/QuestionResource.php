@@ -5,7 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\QuestionStatus;
 use App\Enums\QuestionType;
 use App\Filament\Resources\QuestionResource\Pages;
-use App\Filament\Resources\QuestionResource\RelationManagers\BlocsRelationManager;
+use App\Filament\Resources\QuestionResource\RelationManagers\QuestionsRelationManager;
 use App\Models\Question;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -135,7 +135,7 @@ class QuestionResource extends Resource
     public static function getRelations(): array
     {
         return [
-            BlocsRelationManager::class,
+            QuestionsRelationManager::class,
         ];
     }
 

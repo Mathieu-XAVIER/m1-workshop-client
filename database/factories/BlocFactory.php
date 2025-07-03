@@ -15,11 +15,9 @@ class BlocFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'locale' => $this->faker->word(),
             'nb_questions' => $this->faker->word(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-
             'quizz_id' => Quizz::factory(),
         ];
     }
