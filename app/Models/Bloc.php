@@ -59,6 +59,9 @@ class Bloc extends Model
 
     public function questions(): BelongsToMany
     {
-        return $this->belongsToMany(Question::class, 'bloc_question');
+        return $this->belongsToMany(Question::class, 'bloc_question')
+            ->using(BlocQuestion::class)
+            ->withPivot('skill')
+            ->withTimestamps();
     }
 }

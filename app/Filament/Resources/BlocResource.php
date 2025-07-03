@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\BlocQuestionSkill;
 use App\Filament\Resources\BlocResource\Pages;
 use App\Filament\Resources\BlocResource\RelationManagers\QuestionsRelationManager;
 use App\Models\Bloc;
@@ -47,6 +48,16 @@ class BlocResource extends Resource
                     ->relationship('quizz', 'subject')
                     ->searchable()
                     ->preload()
+                    ->required(),
+
+                Select::make('skill')
+                    ->options([
+                        BlocQuestionSkill::SPEAKING->value => 'Speaking',
+                        BlocQuestionSkill::WRITING->value => 'Writing',
+                        BlocQuestionSkill::READING->value => 'Reading',
+                        BlocQuestionSkill::LISTENING->value => 'Listening',
+                    ])
+                    ->label('Compétence')
                     ->required(),
             ]);
     }

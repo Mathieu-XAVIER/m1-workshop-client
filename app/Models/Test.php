@@ -40,17 +40,24 @@ class Test extends Model
     use HasFactory;
 
     protected $fillable = [
-        'session_id',
+        'exam_session_id',
         'quizz_id',
+        'user_id',
     ];
 
     public function session(): BelongsTo
     {
-        return $this->belongsTo(ExamSession::class, 'session_id');
+        return $this->belongsTo(ExamSession::class, 'exam_session_id');
     }
 
     public function quizz(): BelongsTo
     {
         return $this->belongsTo(Quizz::class, 'quizz_id');
     }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
+

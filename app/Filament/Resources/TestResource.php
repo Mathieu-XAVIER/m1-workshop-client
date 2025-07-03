@@ -29,7 +29,7 @@ class TestResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('session_id')
+                Select::make('exam_session_id')
                     ->relationship('session', 'name')
                     ->required()
                     ->searchable()
@@ -42,6 +42,13 @@ class TestResource extends Resource
                     ->searchable()
                     ->preload()
                     ->label('Questionnaire'),
+
+                Select::make('user_id')
+                    ->relationship('user', 'lastname')
+                    ->required()
+                    ->searchable()
+                    ->preload()
+                    ->label('Utilisateur inscrit'),
             ]);
     }
 
@@ -49,9 +56,22 @@ class TestResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('session_id'),
+                TextColumn::make('session.name')
+                    ->label('Session d\'examen')
+                    ->sortable(),
 
-                TextColumn::make('quizz_id'),
+                TextColumn::make('quizz.subject')
+                    ->label('Questionnaire')
+                    ->sortable(),
+
+                TextColumn::make('user.lastname')
+                    ->formatStateUsing(fn($state, $record) => $record->user->lastname . ' ' . $record->user->firstname)
+                    ->label('Utilisateur')
+                    ->sortable(),
+
+                TextColumn::make('nb_pause')
+                    ->label('Pauses')
+                    ->sortable(),
             ])
             ->filters([
                 //

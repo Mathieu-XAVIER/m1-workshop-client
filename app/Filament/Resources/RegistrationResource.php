@@ -5,15 +5,14 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\RegistrationResource\Pages;
 use App\Models\Registration;
 use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -36,19 +35,23 @@ class RegistrationResource extends Resource
                 Select::make('user_id')
                     ->relationship('user', 'email')
                     ->searchable()
+                    ->preload()
                     ->required(),
 
-                Select::make('session_id')
+                Select::make('exam_session_id')
                     ->label('Exam Session')
                     ->relationship('examSession', 'name')
                     ->searchable()
+                    ->preload()
                     ->required(),
 
-                Checkbox::make('no_show'),
+                Checkbox::make('no_show')
+                    ->label('Non présent'),
 
                 Select::make('registered_by')
                     ->relationship('registeredBy', 'email')
                     ->searchable()
+                    ->preload()
                     ->required(),
             ]);
     }
@@ -58,15 +61,27 @@ class RegistrationResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('user.email')
+                    ->label('Utilisateur')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('session_id'),
+                TextColumn::make('examSession.name')
+                    ->label('Session d\'examen')
+                    ->searchable()
+                    ->sortable(),
 
-                TextColumn::make('no_show'),
+                IconColumn::make('no_show')
+                    ->label('Non présent')
+                    ->boolean(),
 
                 TextColumn::make('registeredBy.email')
+                    ->label('Enregistré par')
                     ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('created_at')
+                    ->label('Date de création')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable(),
             ])
             ->filters([
@@ -94,24 +109,28 @@ class RegistrationResource extends Resource
 
     public static function getGlobalSearchEloquentQuery(): Builder
     {
-        return parent::getGlobalSearchEloquentQuery()->with(['registeredBy', 'user']);
+        return parent::getGlobalSearchEloquentQuery()->with(['registeredBy', 'user', 'examSession']);
     }
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['registeredBy.email', 'user.email'];
+        return ['registeredBy.email', 'user.email', 'examSession.name'];
     }
 
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         $details = [];
 
-        if ($record->registeredBy) {
-            $details['RegisteredBy'] = $record->registeredBy->email;
+        if ($record->user) {
+            $details['Utilisateur'] = $record->user->email;
         }
 
-        if ($record->user) {
-            $details['User'] = $record->user->email;
+        if ($record->examSession) {
+            $details['Session'] = $record->examSession->name;
+        }
+
+        if ($record->registeredBy) {
+            $details['Enregistré par'] = $record->registeredBy->email;
         }
 
         return $details;

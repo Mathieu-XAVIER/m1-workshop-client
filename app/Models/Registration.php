@@ -42,7 +42,7 @@ class Registration extends Model
 
     protected $fillable = [
         'user_id',
-        'session_id',
+        'exam_session_id',
         'no_show',
         'registered_by',
     ];
@@ -54,7 +54,7 @@ class Registration extends Model
 
     public function examSession(): BelongsTo
     {
-        return $this->belongsTo(ExamSession::class, 'session_id');
+        return $this->belongsTo(ExamSession::class, 'exam_session_id');
     }
 
     public function registeredBy(): BelongsTo
