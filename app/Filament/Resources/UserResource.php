@@ -41,6 +41,13 @@ class UserResource extends Resource
                     ->email()
                     ->required(),
 
+                TextInput::make('password')
+                    ->password()
+                    ->required()
+                    ->minLength(8)
+                    ->dehydrateStateUsing(fn ($state) => bcrypt($state))
+                    ->visibleOn('create'),
+
                 Select::make('role')
                     ->enum(UserRole::class)
                     ->options(UserRole::class)
