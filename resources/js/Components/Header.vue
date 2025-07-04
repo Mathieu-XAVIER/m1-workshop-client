@@ -40,20 +40,25 @@ const isAuthenticated = computed(() => !!props.user);
             <div class="user-section">
                 <template v-if="isAuthenticated">
                     <div class="user-menu">
-                        <span class="user-name">{{ user?.name }}</span>
-                        <div class="dropdown-menu">
-                            <Link href="/profile" class="dropdown-item">Profil</Link>
-                            <Link href="/dashboard" class="dropdown-item">Tableau de bord</Link>
-                            <Link href="/logout" method="post" as="button" class="dropdown-item logout">Déconnexion
+                        <span class="user-name">{{ user?.firstname }} {{ user?.lastname }}</span>                        <div class="dropdown-menu">
+                            <Link :href="route('profile.edit')" class="dropdown-item">Profil</Link>
+                            <Link :href="route('dashboard')" class="dropdown-item">Tableau de bord</Link>
+                            <Link :href="route('logout')" method="post" as="button" class="dropdown-item logout">
+                                Déconnexion
                             </Link>
                         </div>
                     </div>
                 </template>
                 <template v-else>
-                    <div class="auth-buttons">
-                        <Link href="/login" class="login-button">Connexion</Link>
-                        <Link href="/register" class="register-button">S'inscrire</Link>
-                    </div>
+                    <nav class="auth-buttons">
+                        <Link :href="route('login')" class="login-button">
+                            Connexion
+                        </Link>
+
+                        <Link :href="route('register')" class="register-button">
+                            S'inscrire
+                        </Link>
+                    </nav>
                 </template>
             </div>
         </div>
