@@ -1,4 +1,4 @@
-<script setup>
+    <script setup>
     import { Link, useForm } from '@inertiajs/vue3';
     import { ref } from 'vue';
 
@@ -39,7 +39,7 @@
         </span>
         <div v-if="form.errors.password" class="error-message">{{ form.errors.password }}</div>
       </div>
-      
+
       <div>
         <button type="submit" :disabled="form.processing">Se connecter</button>
       </div>
@@ -140,4 +140,4 @@ button:disabled {
   font-size: 0.875em;
   margin-top: 0.25rem;
 }
-</style> 
+</style>
