@@ -58,7 +58,8 @@ class QuestionResource extends Resource
                 Select::make('status')
                     ->options(collect(QuestionStatus::cases())
                         ->mapWithKeys(fn(QuestionStatus $status) => [$status->value => $status->label()]))
-                    ->required(),
+                    ->required()
+                    ->visibleOn('edit'),
 
                 Select::make('type')
                     ->options(collect(QuestionType::cases())
