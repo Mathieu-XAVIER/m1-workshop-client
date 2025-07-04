@@ -16,6 +16,7 @@ use Illuminate\Support\Carbon;
  *
  *
  * @property int $id
+ * @property string $title
  * @property string $subject
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -41,6 +42,7 @@ class Quizz extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'title',
         'subject',
         'locale',
     ];
