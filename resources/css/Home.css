@@ -344,35 +344,6 @@
     z-index: 2; /* Augmenter le z-index pour s'assurer que le bouton est visible */
 }
 
-.decorative-element {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 80px;
-    height: 80px;
-    border-bottom-left-radius: 24px;
-    opacity: 0.1;
-    transition: var(--transition-smooth);
-    z-index: 1;
-}
-
-.category-card.math .decorative-element {
-    background: var(--primary-blue);
-}
-
-.category-card.french .decorative-element {
-    background: var(--primary-green);
-}
-
-.category-card.computer .decorative-element {
-    background: var(--primary-purple);
-}
-
-.category-card:hover .decorative-element {
-    opacity: 0.2;
-    transform: scale(1.1);
-}
-
 /* Section Footer */
 .footer-section {
     text-align: center;
