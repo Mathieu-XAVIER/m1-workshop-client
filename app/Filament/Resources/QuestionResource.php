@@ -266,11 +266,22 @@ class QuestionResource extends Resource
 
         return match ($questionType) {
             QuestionType::MULTIPLE_CHOICE => [
-                CheckboxList::make('answer.correct_options')
-                    ->label('Options correctes')
-                    ->options(fn(Get $get) => collect($get('content.options') ?? [])
-                        ->mapWithKeys(fn($option, $key) => [$key => $option['text'] ?? '']))
-                    ->required(),
+                Repeater::make('answer.options')
+                    ->label('Réponses possibles')
+                    ->schema([
+                        TextInput::make('text')
+                            ->label('Texte de la réponse')
+                            ->required(),
+                        Radio::make('correct')
+                            ->label('Réponse correcte ?')
+                            ->options([
+                                true => 'Oui',
+                                false => 'Non',
+                            ])
+                            ->required(),
+                    ])
+                    ->required()
+                    ->defaultItems(4),
             ],
             QuestionType::TRUE_FALSE => [
                 Radio::make('answer.correct')

@@ -187,16 +187,27 @@ function isAnswerCorrect(question) {
     try {
         switch (question.type) {
             case 'multiple_choice':
-                if (!userAnswer.selected || !question.answer.correct_options) return false;
+                if (!userAnswer.selected || !question.answer.options) return false;
 
-                // Normaliser les tableaux
-                const selected = Array.isArray(userAnswer.selected) ? userAnswer.selected : [userAnswer.selected];
-                const correct = Array.isArray(question.answer.correct_options)
-                    ? question.answer.correct_options
-                    : [question.answer.correct_options];
+                const selectedIndices = Array.isArray(userAnswer.selected)
+                    ? userAnswer.selected
+                    : [userAnswer.selected];
 
-                return arraysEqual(selected, correct);
+                let correctSelections = 0;
+                let totalCorrectOptions = 0;
 
+                question.answer.options.forEach((option, index) => {
+                    if (option.correct === true) {
+                        totalCorrectOptions++;
+                        if (selectedIndices.includes(index)) {
+                            correctSelections++;
+                        }
+                    } else if (selectedIndices.includes(index)) {
+                        correctSelections--;
+                    }
+                });
+
+                return correctSelections === totalCorrectOptions && correctSelections >= 0;
             case 'true_false':
                 const userBool = userAnswer.correct === true || userAnswer.correct === "1" || userAnswer.correct === 1;
                 const correctBool = question.answer.correct === true || question.answer.correct === "1" || question.answer.correct === 1;
@@ -277,15 +288,16 @@ function formatCorrectAnswerDisplay(question) {
 
     switch (question.type) {
         case 'multiple_choice':
-            return question.answer.correct_options
-                ? (Array.isArray(question.answer.correct_options) ? question.answer.correct_options : [question.answer.correct_options])
-                    .map(idx => question.content.options[idx]?.text || 'Option invalide').join(', ')
-                : "Non défini";
+            if (!question.answer.options) return "Non défini";
+
+            return question.answer.options
+                .filter(option => option.correct)
+                .map(option => option.text)
+                .join(', ');
         case 'true_false':
             return question.answer.correct === true || question.answer.correct === "1" || question.answer.correct === 1 ? "Vrai" : "Faux";
         case 'short_answer':
         case 'long_answer':
-            // Utiliser correct_answer au lieu de answer
             return question.answer.correct_answer || "Non défini";
         case 'fill_in_the_blank':
             // Gérer les objets avec propriété value
