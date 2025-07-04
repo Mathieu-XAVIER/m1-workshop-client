@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, computed} from 'vue';
+import {computed, ref} from 'vue';
 
 interface Question {
     id: number;
@@ -106,7 +106,6 @@ const resultsByBloc = computed(() => {
     return results;
 });
 
-// Fonctions pour gérer les réponses et la navigation
 function saveAnswer(answer) {
     if (!currentQuestion.value) return;
 
@@ -114,7 +113,6 @@ function saveAnswer(answer) {
 
     console.log(`Réponse enregistrée pour la question ${currentQuestion.value.id}:`, answer);
 
-    // Réinitialiser les champs de réponse
     shortAnswer.value = '';
     longAnswer.value = '';
     blankAnswers.value = [];
@@ -142,14 +140,11 @@ function goToNextQuestion() {
     }
 }
 
-//renvoie true si une question suivante est disponible
 function isANextQuestionAvailable() {
     const currentBlocQuestions = currentBloc.value?.questions || [];
-    if (currentQuestionIndex.value < currentBlocQuestions.length - 1) {
-        return true;
-    }
+    return currentQuestionIndex.value < currentBlocQuestions.length - 1;
 
-    return false;
+
 }
 
 function finishQuiz() {
@@ -162,7 +157,6 @@ function viewResults() {
 }
 
 function retakeQuiz() {
-    // Réinitialiser le quiz
     currentBlocIndex.value = 0;
     currentQuestionIndex.value = 0;
     userAnswers.value = {};
@@ -171,8 +165,7 @@ function retakeQuiz() {
 }
 
 function extractBlanks(text) {
-    const matches = text.match(/\[blank\]/g) || [];
-    return matches;
+    return text.match(/\[blank\]/g) || [];
 }
 
 function formatBlankText(text) {
@@ -194,7 +187,6 @@ function isAnswerCorrect(question) {
     try {
         switch (question.type) {
             case 'multiple_choice':
-                // La structure dans QuestionResource utilise answer.correct_options
                 if (!userAnswer.selected || !question.answer.correct_options) return false;
 
                 // Normaliser les tableaux
@@ -206,12 +198,13 @@ function isAnswerCorrect(question) {
                 return arraysEqual(selected, correct);
 
             case 'true_false':
-                // Vérifier si les booléens correspondent
-                return userAnswer.correct === question.answer.correct;
+                const userBool = userAnswer.correct === true || userAnswer.correct === "1" || userAnswer.correct === 1;
+                const correctBool = question.answer.correct === true || question.answer.correct === "1" || question.answer.correct === 1;
+
+                return userBool === correctBool;
 
             case 'short_answer':
             case 'long_answer':
-                // Dans QuestionResource, c'est answer.correct_answer
                 if (!userAnswer.answer || !question.answer.correct_answer) return false;
 
                 const userText = userAnswer.answer.trim().toLowerCase();
@@ -243,22 +236,16 @@ function isAnswerCorrect(question) {
     }
 }
 
-// Fonction utilitaire pour comparer deux tableaux - CORRIGÉE
 function arraysEqual(a, b) {
-    // S'assurer que a et b sont des tableaux
     if (!Array.isArray(a) || !Array.isArray(b)) return false;
 
-    // Si les longueurs sont différentes, les tableaux ne sont pas égaux
     if (a.length !== b.length) return false;
 
-    // Convertir les éléments en chaînes pour comparaison
     const normalizeArray = arr => arr.map(item => String(item).trim());
 
-    // Trier les tableaux normalisés
     const sortedA = [...normalizeArray(a)].sort();
     const sortedB = [...normalizeArray(b)].sort();
 
-    // Comparer chaque élément
     return sortedA.every((val, idx) => val === sortedB[idx]);
 }
 
@@ -274,7 +261,7 @@ function formatAnswerDisplay(question) {
                     .map(idx => question.content.options[idx]?.text || 'Option invalide').join(', ')
                 : "Non sélectionné";
         case 'true_false':
-            return userAnswer.correct === true ? "Vrai" : "Faux";
+            return userAnswer.correct === true || userAnswer.correct === "1" || userAnswer.correct === 1 ? "Vrai" : "Faux";
         case 'short_answer':
         case 'long_answer':
             return userAnswer.answer || "Sans réponse";
@@ -285,7 +272,6 @@ function formatAnswerDisplay(question) {
     }
 }
 
-// Fonction pour formater l'affichage des bonnes réponses
 function formatCorrectAnswerDisplay(question) {
     if (!question.answer) return "Pas de réponse correcte définie";
 
@@ -296,7 +282,7 @@ function formatCorrectAnswerDisplay(question) {
                     .map(idx => question.content.options[idx]?.text || 'Option invalide').join(', ')
                 : "Non défini";
         case 'true_false':
-            return question.answer.correct === true ? "Vrai" : "Faux";
+            return question.answer.correct === true || question.answer.correct === "1" || question.answer.correct === 1 ? "Vrai" : "Faux";
         case 'short_answer':
         case 'long_answer':
             // Utiliser correct_answer au lieu de answer
