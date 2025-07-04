@@ -112,6 +112,8 @@ function saveAnswer(answer) {
 
     userAnswers.value[currentQuestion.value.id] = answer;
 
+    console.log(`Réponse enregistrée pour la question ${currentQuestion.value.id}:`, answer);
+
     // Réinitialiser les champs de réponse
     shortAnswer.value = '';
     longAnswer.value = '';
@@ -121,6 +123,10 @@ function saveAnswer(answer) {
 }
 
 function goToNextQuestion() {
+    console.log("Passage à la question suivante...");
+    if (isANextQuestionAvailable() === false) {
+        finishQuiz()
+    }
     const currentBlocQuestions = currentBloc.value?.questions || [];
 
     if (currentQuestionIndex.value < currentBlocQuestions.length - 1) {
@@ -136,7 +142,18 @@ function goToNextQuestion() {
     }
 }
 
+//renvoie true si une question suivante est disponible
+function isANextQuestionAvailable() {
+    const currentBlocQuestions = currentBloc.value?.questions || [];
+    if (currentQuestionIndex.value < currentBlocQuestions.length - 1) {
+        return true;
+    }
+
+    return false;
+}
+
 function finishQuiz() {
+    console.log("Quiz terminé. Réponses utilisateur:", userAnswers.value);
     quizFinished.value = true;
 }
 
